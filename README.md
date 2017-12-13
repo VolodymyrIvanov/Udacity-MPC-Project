@@ -2,7 +2,56 @@
 Self-Driving Car Engineer Nanodegree Program
 
 ---
+## The Model
 
+Used in the project model is a simple Kinematic Model consisting of Vehicle state and Actuator attributes. 
+
+Vehicle State can be represented as a vector, consisting:
+- Vehicle position **X**
+- Vehicle position **Y**
+- Vehicle orientation **PSI**
+- Velocity **V**
+- Cross Track Error **CTE**
+- Orientation Error **EPSI**
+
+Actuator attributes consisting set of controls used to navigate and accelerate/deccelerate the vehicle:
+- Steering angle **delta** in bounds [-25°..25°]
+- Acceleration **a** in bounds [-1..1]
+
+Update Equations are following:
+```
+x​t+1​​=x​t​​+v​t​​∗cos(ψ​t​​)∗dt
+
+y​t+1​​=y​t​​+v​t​​∗sin(ψ​t​​)∗dt
+
+ψ​t+1​​=ψ​t​​−​​​​​v​t/L​f​​​​∗δ​t​​∗dt
+
+v​t+1​​=v​t​​+a​t​​∗dt
+
+cte​t+1​​=f(x​t​​)−y​t​​+(v​t​​∗sin(eψ​t​​)∗dt)
+
+eψ​t+1​​=ψ​t​​−ψdes​t−​​​​​v​t/L​f​​​​∗δ​t​​∗dt
+```
+
+## Timestep Length and Elapsed Duration
+
+After some experiments were choosen values N = 10 and dt = 0.01 s
+
+
+## Model Predictive Control with Latency
+
+Relating to 100ms latency vehicle state is transformed using formulas:
+```cpp
+double px_state = v * dt;
+double py_state = 0;
+double psi_state = -v * steering_angle * dt / Lf;
+double v_state = v + throttle * dt;
+double cte_state = cte + v * sin(epsi) * dt;
+double epsi_state = epsi - v * steering_angle * dt / Lf;
+
+``` 
+ 
+---
 ## Dependencies
 
 * cmake >= 3.5
