@@ -35,8 +35,21 @@ eψ​t+1​​=ψ​t​​−ψdes​t−​​​​​v​t/L​f​​​�
 
 ## Timestep Length and Elapsed Duration
 
-After some experiments were choosen values N = 10 and dt = 0.01 s
+During adjusting of N and dt values, I've started with specified in lesson number of steps N = 25 and intuitive duration dt = 0.1, which I thought is fully quick enough for reaction. Thinking, that big number of steps N can cause latency in simulation, because the controller should process more cycle steps I've decreased time-to-time number of steps, and check on each iteration, that the controller still work properly. Minimal reached number with good enough results is 10, what was decided to use as final.
+So, assuming all practice steps, the final parameters are N = 10 and dt = 0.1 s.
 
+## Polynomial Fitting and MPC Preprocessing
+
+Before using of state vector in controller I've transformed the coordinates, given from simulator into car's coordinate system.
+The used formulas are following, using car position and orientation:  
+```cpp
+waypoint_x = dx * cos(-psi) - dy * sin(-psi);
+waypoint_y = dx * sin(-psi) + dy * cos(-psi);
+```
+where,
+- *dx* is a result of subtraction of original point X and car position X
+- *dy* is a result of subtraction of original point Y and car position Y
+- *psi* is a car orientation angle  
 
 ## Model Predictive Control with Latency
 
